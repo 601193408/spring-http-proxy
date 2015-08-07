@@ -10,6 +10,8 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.http.client.ClientHttpResponse;
@@ -27,11 +29,15 @@ public class MarkLogicProxy {
     private String username = "admin";
     private String password = "admin";
 
+    private final static Logger logger = LoggerFactory.getLogger(MarkLogicProxy.class);
+
     public void proxy(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
         RestTemplate t = newRestTemplate(host, port, username, password);
 
         String url = buildUrl(httpRequest);
-        System.out.println("URL: " + url);
+        if (logger.isInfoEnabled()) {
+            logger.info("Proxying to URL: " + url);
+        }
 
         t.execute(url, determineMethod(httpRequest), new RequestCallback() {
             @Override
