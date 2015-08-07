@@ -8,7 +8,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.ResponseExtractor;
 
-public class DefaultResponseExtractor implements ResponseExtractor<Void> {
+public class DefaultResponseExtractor extends LoggingObject implements ResponseExtractor<Void> {
 
     private HttpServletResponse httpResponse;
 

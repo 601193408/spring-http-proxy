@@ -18,6 +18,13 @@ import org.springframework.web.client.RestTemplate;
 
 import com.marklogic.spring.proxy.MarkLogicProxy;
 
+/**
+ * Spring Boot class that can be used to quickly fire up a Tomcat instance for testing out our proxy in a real-life
+ * scenario - i.e. where we're receiving HTTP requests via Spring MVC and then proxying them to MarkLogic.
+ * 
+ * This class is currently hardcoding a number of things that would normally be autowired in via Spring, but it's just
+ * for demonstration purposes.
+ */
 @Controller
 @EnableAutoConfiguration
 public class SampleController {
@@ -30,6 +37,9 @@ public class SampleController {
 
     private MarkLogicProxy mlProxy;
 
+    /**
+     * Fire up Tomcat.
+     */
     public static void main(String[] args) throws Exception {
         SpringApplication.run(SampleController.class, args);
     }
@@ -42,10 +52,14 @@ public class SampleController {
         mlProxy = new MarkLogicProxy(t, host, port);
     }
 
+    /**
+     * A Spring-MVC controller can have as many methods like this as it wants. This one is copying the Content-type
+     * header to the MarkLogic HTTP request; your method can choose whichever headers it wants.
+     */
     @RequestMapping("/v1/*")
     @ResponseBody
     public void home(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
-        mlProxy.proxy(httpRequest, httpResponse);
+        mlProxy.proxy(httpRequest, httpResponse, "Content-type");
     }
 
     /**
