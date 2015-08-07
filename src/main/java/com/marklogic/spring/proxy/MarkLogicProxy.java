@@ -20,16 +20,39 @@ public class MarkLogicProxy extends LoggingObject {
         this.port = port;
     }
 
+    /**
+     * Proxy a request without copying any headers.
+     * 
+     * @param httpRequest
+     * @param httpResponse
+     */
     public void proxy(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         proxy(httpRequest, httpResponse, new DefaultRequestCallback(httpRequest), new DefaultResponseExtractor(
                 httpResponse));
     }
 
+    /**
+     * Proxy a request and copy the given headers on both the request and the response.
+     * 
+     * @param httpRequest
+     * @param httpResponse
+     * @param headerNamesToCopy
+     */
     public void proxy(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String... headerNamesToCopy) {
         proxy(httpRequest, httpResponse, new DefaultRequestCallback(httpRequest, headerNamesToCopy),
-                new DefaultResponseExtractor(httpResponse));
+                new DefaultResponseExtractor(httpResponse, headerNamesToCopy));
     }
 
+    /**
+     * Specify your own request callback and response extractor. This gives you the most flexibility, but does the least
+     * for you.
+     * 
+     * @param httpRequest
+     * @param httpResponse
+     * @param requestCallback
+     * @param responseExtractor
+     * @return
+     */
     public <T> T proxy(HttpServletRequest httpRequest, HttpServletResponse httpResponse,
             RequestCallback requestCallback, ResponseExtractor<T> responseExtractor) {
         String url = buildUrl(httpRequest);

@@ -56,7 +56,7 @@ public class SampleController {
      * A Spring-MVC controller can have as many methods like this as it wants. This one is copying the Content-type
      * header to the MarkLogic HTTP request; your method can choose whichever headers it wants.
      */
-    @RequestMapping("/v1/*")
+    @RequestMapping("/v1/**")
     @ResponseBody
     public void home(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         mlProxy.proxy(httpRequest, httpResponse, "Content-type");

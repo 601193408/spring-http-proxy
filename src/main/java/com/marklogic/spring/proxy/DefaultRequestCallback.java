@@ -13,6 +13,9 @@ public class DefaultRequestCallback extends LoggingObject implements RequestCall
     private HttpServletRequest httpRequest;
     private String[] headerNamesToCopy;
 
+    /**
+     * TODO May want the ability to specify header names to exclude instead of including.
+     */
     public DefaultRequestCallback(HttpServletRequest httpRequest, String... headerNamesToCopy) {
         this.httpRequest = httpRequest;
         this.headerNamesToCopy = headerNamesToCopy;
@@ -29,8 +32,8 @@ public class DefaultRequestCallback extends LoggingObject implements RequestCall
             for (String name : headerNamesToCopy) {
                 String value = httpRequest.getHeader(name);
                 // TODO Don't set it if it's null?
-                if (logger.isInfoEnabled()) {
-                    logger.info(format("Copying header '%s' to '%s'", name, value));
+                if (logger.isDebugEnabled()) {
+                    logger.debug(format("Setting MarkLogic HTTP header '%s' to '%s'", name, value));
                 }
                 request.getHeaders().set(name, value);
             }
