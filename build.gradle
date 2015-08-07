@@ -1,0 +1,19 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+repositories {
+    mavenCentral()
+    maven {url "file:../../gh-pages-marklogic-java/releases"}
+    maven {url "http://developer.marklogic.com/maven2/"}
+    maven {url "http://rjrudin.github.io/marklogic-java/releases"}
+}
+
+
+dependencies {
+    compile "org.apache.httpcomponents:httpclient:4.3.5"
+    compile "org.springframework:spring-web:4.1.7.RELEASE"
+    compile "javax.servlet:javax.servlet-api:3.1.0"
+    testCompile "com.jayway.restassured:rest-assured:2.3.1"
+    testCompile "org.springframework.boot:spring-boot-starter-web:1.2.5.RELEASE"
+}
+
