@@ -26,11 +26,11 @@ public class DefaultResponseExtractor extends LoggingObject implements ResponseE
         InputStream body = response.getBody();
         if (body != null) {
             if (logger.isDebugEnabled()) {
-                logger.debug("Copying the MarkLogic HTTP response body to the servlet HTTP response");
+                logger.debug("Copying the client HTTP response body to the servlet HTTP response");
             }
             FileCopyUtils.copy(response.getBody(), httpResponse.getOutputStream());
         } else if (logger.isDebugEnabled()) {
-            logger.debug("No body in the MarkLogic HTTP response, so not copying anything to the servlet HTTP response");
+            logger.debug("No body in the client HTTP response, so not copying anything to the servlet HTTP response");
         }
         return null;
     }

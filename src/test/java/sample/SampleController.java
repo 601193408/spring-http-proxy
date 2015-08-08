@@ -58,8 +58,14 @@ public class SampleController {
      */
     @RequestMapping("/v1/**")
     @ResponseBody
-    public void home(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+    public void proxy(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         mlProxy.proxy(httpRequest, httpResponse, "Content-type");
+    }
+
+    @RequestMapping("/search")
+    @ResponseBody
+    public void search(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+        mlProxy.proxy("/v1/search", httpRequest, httpResponse, "Content-type");
     }
 
     /**

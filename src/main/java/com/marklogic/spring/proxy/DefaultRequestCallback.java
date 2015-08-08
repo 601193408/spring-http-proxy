@@ -33,7 +33,7 @@ public class DefaultRequestCallback extends LoggingObject implements RequestCall
                 String value = httpRequest.getHeader(name);
                 // TODO Don't set it if it's null?
                 if (logger.isDebugEnabled()) {
-                    logger.debug(format("Setting MarkLogic HTTP header '%s' to '%s'", name, value));
+                    logger.debug(format("Setting client HTTP header '%s' to '%s'", name, value));
                 }
                 request.getHeaders().set(name, value);
             }

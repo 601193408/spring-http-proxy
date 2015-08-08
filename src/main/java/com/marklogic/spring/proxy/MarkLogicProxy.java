@@ -1,5 +1,8 @@
 package com.marklogic.spring.proxy;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,8 +30,7 @@ public class MarkLogicProxy extends LoggingObject {
      * @param httpResponse
      */
     public void proxy(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
-        proxy(httpRequest, httpResponse, new DefaultRequestCallback(httpRequest), new DefaultResponseExtractor(
-                httpResponse));
+        proxy(httpRequest.getServletPath(), httpRequest, httpResponse);
     }
 
     /**
@@ -39,7 +41,21 @@ public class MarkLogicProxy extends LoggingObject {
      * @param headerNamesToCopy
      */
     public void proxy(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String... headerNamesToCopy) {
-        proxy(httpRequest, httpResponse, new DefaultRequestCallback(httpRequest, headerNamesToCopy),
+        proxy(httpRequest.getServletPath(), httpRequest, httpResponse, new DefaultRequestCallback(httpRequest,
+                headerNamesToCopy), new DefaultResponseExtractor(httpResponse, headerNamesToCopy));
+    }
+
+    /**
+     * Proxy a request, using the given path instead of the servlet path in the HttpServletRequest.
+     * 
+     * @param path
+     * @param httpRequest
+     * @param httpResponse
+     * @param headerNamesToCopy
+     */
+    public void proxy(String path, HttpServletRequest httpRequest, HttpServletResponse httpResponse,
+            String... headerNamesToCopy) {
+        proxy(path, httpRequest, httpResponse, new DefaultRequestCallback(httpRequest, headerNamesToCopy),
                 new DefaultResponseExtractor(httpResponse, headerNamesToCopy));
     }
 
@@ -47,34 +63,34 @@ public class MarkLogicProxy extends LoggingObject {
      * Specify your own request callback and response extractor. This gives you the most flexibility, but does the least
      * for you.
      * 
+     * @param path
      * @param httpRequest
      * @param httpResponse
      * @param requestCallback
      * @param responseExtractor
      * @return
      */
-    public <T> T proxy(HttpServletRequest httpRequest, HttpServletResponse httpResponse,
+    public <T> T proxy(String path, HttpServletRequest httpRequest, HttpServletResponse httpResponse,
             RequestCallback requestCallback, ResponseExtractor<T> responseExtractor) {
-        String url = buildUrl(httpRequest);
-        HttpMethod method = determineMethod(httpRequest);
+        URI uri = buildUri(httpRequest, host, port, path);
 
         if (logger.isInfoEnabled()) {
-            logger.info(format("Proxying to URL: %s", url));
+            logger.info(format("Proxying to URI: %s", uri));
         }
 
-        return restTemplate.execute(url, method, requestCallback, responseExtractor);
+        HttpMethod method = determineMethod(httpRequest);
+        return restTemplate.execute(uri, method, requestCallback, responseExtractor);
     }
 
     protected HttpMethod determineMethod(HttpServletRequest request) {
         return HttpMethod.valueOf(request.getMethod());
     }
 
-    protected String buildUrl(HttpServletRequest request) {
-        String url = format("http://%s:%d%s", host, port, request.getServletPath());
-        String qs = request.getQueryString();
-        if (qs != null) {
-            url += "?" + qs;
+    protected URI buildUri(HttpServletRequest httpRequest, String host, int port, String path) {
+        try {
+            return new URI("http", null, host, port, path, httpRequest.getQueryString(), null);
+        } catch (URISyntaxException ex) {
+            throw new RuntimeException("Unable to build URI, cause: " + ex.getMessage(), ex);
         }
-        return url;
     }
 }
