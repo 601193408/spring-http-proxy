@@ -1,4 +1,4 @@
-package com.marklogic.spring.proxy;
+package com.rjrudin.spring.http.proxy;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,13 +11,13 @@ import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
-public class MarkLogicProxy extends LoggingObject {
+public class HttpProxy extends LoggingObject {
 
     private RestTemplate restTemplate;
     private String host;
     private int port;
 
-    public MarkLogicProxy(RestTemplate restTemplate, String host, int port) {
+    public HttpProxy(RestTemplate restTemplate, String host, int port) {
         this.restTemplate = restTemplate;
         this.host = host;
         this.port = port;

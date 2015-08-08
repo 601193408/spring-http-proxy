@@ -1,4 +1,4 @@
-package com.marklogic.spring.proxy;
+package com.rjrudin.spring.http.proxy;
 
 import java.io.IOException;
 

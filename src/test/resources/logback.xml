@@ -12,7 +12,7 @@
     <appender-ref ref="STDOUT" />
   </root>
 
-  <logger name="com.marklogic.spring.proxy" level="DEBUG" additivity="false">
+  <logger name="com.rjrudin.spring.http.proxy" level="DEBUG" additivity="false">
     <appender-ref ref="STDOUT"/>
   </logger>
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-import com.marklogic.spring.proxy.MarkLogicProxy;
+import com.rjrudin.spring.http.proxy.HttpProxy;
 
 /**
  * Spring Boot class that can be used to quickly fire up a Tomcat instance for testing out our proxy in a real-life
@@ -35,7 +35,7 @@ public class SampleController {
     private String username = "admin";
     private String password = "admin";
 
-    private MarkLogicProxy mlProxy;
+    private HttpProxy mlProxy;
 
     /**
      * Fire up Tomcat.
@@ -49,7 +49,7 @@ public class SampleController {
      */
     public SampleController() {
         RestTemplate t = newRestTemplate(host, port, username, password);
-        mlProxy = new MarkLogicProxy(t, host, port);
+        mlProxy = new HttpProxy(t, host, port);
     }
 
     /**
