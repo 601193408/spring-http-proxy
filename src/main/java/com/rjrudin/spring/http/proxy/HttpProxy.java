@@ -9,16 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestOperations;
 
 public class HttpProxy extends LoggingObject {
 
-    private RestTemplate restTemplate;
+    private RestOperations restOperations;
     private String host;
     private int port;
 
-    public HttpProxy(RestTemplate restTemplate, String host, int port) {
-        this.restTemplate = restTemplate;
+    public HttpProxy(RestOperations restTemplate, String host, int port) {
+        this.restOperations = restTemplate;
         this.host = host;
         this.port = port;
     }
@@ -79,7 +79,7 @@ public class HttpProxy extends LoggingObject {
         }
 
         HttpMethod method = determineMethod(httpRequest);
-        return restTemplate.execute(uri, method, requestCallback, responseExtractor);
+        return restOperations.execute(uri, method, requestCallback, responseExtractor);
     }
 
     protected HttpMethod determineMethod(HttpServletRequest request) {
