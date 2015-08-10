@@ -31,7 +31,6 @@ public class DefaultRequestCallback extends LoggingObject implements RequestCall
         if (headerNamesToCopy != null) {
             for (String name : headerNamesToCopy) {
                 String value = httpRequest.getHeader(name);
-                // TODO Don't set it if it's null?
                 if (logger.isDebugEnabled()) {
                     logger.debug(format("Setting client HTTP header '%s' to '%s'", name, value));
                 }
