@@ -32,6 +32,9 @@ public class DefaultResponseExtractor extends LoggingObject implements ResponseE
         } else if (logger.isDebugEnabled()) {
             logger.debug("No body in the client HTTP response, so not copying anything to the servlet HTTP response");
         }
+
+        httpResponse.setStatus(response.getRawStatusCode());
+
         return null;
     }
 
@@ -39,12 +42,13 @@ public class DefaultResponseExtractor extends LoggingObject implements ResponseE
         if (headerNamesToCopy != null) {
             for (String name : headerNamesToCopy) {
                 List<String> values = response.getHeaders().get(name);
-                // TODO Don't set it if it's null?
-                if (logger.isDebugEnabled()) {
-                    logger.debug(format("Setting servlet HTTP header '%s' to '%s'", name, values));
-                }
-                for (String value : values) {
-                    httpResponse.addHeader(name, value);
+                if (values != null) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(format("Setting servlet HTTP header '%s' to '%s'", name, values));
+                    }
+                    for (String value : values) {
+                        httpResponse.addHeader(name, value);
+                    }
                 }
             }
         }
